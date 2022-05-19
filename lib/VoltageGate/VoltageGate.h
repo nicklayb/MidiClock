@@ -3,6 +3,12 @@
 
 #include <Counter.h>
 
+enum GateState
+{
+  High,
+  Low,
+};
+
 /*
  * VoltageGate
  *
@@ -18,8 +24,10 @@ private:
   Counter *gateDuration;
   int pin;
   bool inverted = false;
+  GateState state = Low;
   int getHigh();
   int getLow();
+  void writeToPin();
 
 public:
   VoltageGate(int pin);

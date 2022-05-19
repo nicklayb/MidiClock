@@ -14,6 +14,8 @@
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
+bool awaitStartRise = false;
+
 /*
  * Handler for when MIDI clock has risen
  */
@@ -69,13 +71,18 @@ void loop()
 void handleClockRise(void)
 {
   clockGate->rise();
+  if (awaitStartRise)
+  {
+    startStopGate->rise();
+    awaitStartRise = false;
+  }
 }
 
 void handleMidiStart(void)
 {
   midiClock->start();
-  startStopGate->rise();
   runningGate->rise();
+  awaitStartRise = true;
 }
 
 void handleMidiStop(void)

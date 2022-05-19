@@ -34,7 +34,8 @@ VoltageGate::VoltageGate(int pin, int gateLength, bool inverted)
 void VoltageGate::rise()
 {
   this->gateDuration->start();
-  digitalWrite(this->pin, this->getHigh());
+  this->state = High;
+  this->writeToPin();
 }
 
 /*
@@ -42,7 +43,8 @@ void VoltageGate::rise()
  */
 void VoltageGate::fall()
 {
-  digitalWrite(this->pin, this->getLow());
+  this->state = Low;
+  this->writeToPin();
 }
 
 /*
@@ -79,4 +81,12 @@ int VoltageGate::getHigh()
     return LOW;
   }
   return HIGH;
+}
+
+/*
+ * Writes voltage to pin from gate's state.
+ */
+void VoltageGate::writeToPin()
+{
+  digitalWrite(this->pin, this->state == Low ? this->getLow() : this->getHigh());
 }
